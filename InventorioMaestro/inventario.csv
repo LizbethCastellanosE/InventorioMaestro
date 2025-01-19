@@ -1,0 +1,25 @@
+ID,Nombre,Stock,Precio,Proveedor
+31,Tornillo 4mm,100,0,12,N/A
+32,Martillo acero,20,5,50,N/A
+33,Pintura blanca interior,15,12,30,N/A
+34,Rodillo para paredes,25,4,70,N/A
+35,Taladro profesional,18,72,50,N/A
+36,Bombilla LED 10W,100,2,90,N/A
+37,Regleta de 4 enchufes,50,5,00,N/A
+38,Cerradura de seguridad,10,18,60,N/A
+39,Broca madera 10mm,40,1,75,N/A
+40,Lija grano 120,200,0,80,N/A
+41,Interruptor 2 polos,30,3,20,N/A
+42,Enchufe con toma tierra,40,2,50,N/A
+43,Tornillo 4mm,100,0,12,Herramientas SA
+44,Martillo acero,20,5,50,Herramientas SA
+45,Pintura blanca interior,15,12,30,Pinturas Martínez
+46,Rodillo para paredes,25,4,70,Pinturas Martínez
+47,Taladro profesional,10,72,50,Máquinas y Más
+48,Bombilla LED 10W,100,2,90,LuzClara
+49,Regleta de 4 enchufes,50,5,00,Distribuciones Eléctricas
+50,Cerradura de seguridad,10,18,60,Seguridad House
+51,Broca madera 10mm,34,1,75,Herramientas SA
+52,Lija grano 120,200,0,80,Pinturas Martínez
+53,Interruptor 2 polos,30,3,20,Distribuciones Eléctricas
+55,Tornillo 6mm,100,0,20,N/A

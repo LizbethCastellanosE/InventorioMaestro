@@ -644,24 +644,40 @@ public class Main {
     private static void exportarInventario() {
         System.out.println("Exportando inventario a inventario.csv...");
 
-        try (PrintWriter writer = new PrintWriter(new File("inventario.csv"))) {
+        // Define el archivo de salida
+        String rutaArchivo = "inventario.csv";
+
+        try (PrintWriter writer = new PrintWriter(new File(rutaArchivo))) {
             // Escribir encabezados
-            writer.println("ID,Nombre,Stock,Precio,Proveedor");
+            writer.println("ID,Nombre,Categoría,Stock,Precio,Proveedor");
 
             // Obtener productos y escribir en el archivo
-            for (Producto producto : productoDAO.obtenerTodos()) {
+            List<Producto> productos = productoDAO.obtenerTodos();
+
+            if (productos.isEmpty()) {
+                System.out.println("No hay productos registrados en el inventario.");
+                return;
+            }
+
+            for (Producto producto : productos) {
+                // Manejar el nombre del proveedor si no está asociado
                 String proveedor = (producto.getProveedor() != null) ? producto.getProveedor().getNombre() : "N/A";
-                writer.printf("%d,%s,%d,%.2f,%s%n",
+
+                // Escribir el producto en el archivo CSV
+                writer.printf("%d,%s,%s,%d,%.2f,%s%n",
                         producto.getId(),
                         producto.getNombre(),
+                        producto.getCategoria(),
                         producto.getStock(),
                         producto.getPrecio(),
                         proveedor);
             }
 
-            System.out.println("Inventario exportado correctamente a inventario.csv.");
+            System.out.println("Inventario exportado correctamente a " + rutaArchivo + ".");
         } catch (IOException e) {
             System.out.println("Error al exportar el inventario: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error inesperado durante la exportación: " + e.getMessage());
         }
     }
 
@@ -863,7 +879,7 @@ public class Main {
             // Leer cada línea del archivo CSV
             while ((line = br.readLine()) != null) {
                 // Saltar encabezados si existen
-                if (contador == 0 && line.contains("ID")) {
+                if (contador == 0 && line.toLowerCase().contains("id")) {
                     contador++;
                     continue;
                 }
@@ -873,19 +889,35 @@ public class Main {
 
                 // Asegurar que la línea tiene el número correcto de columnas
                 if (values.length < 5) {
-                    System.out.println("Línea inválida: " + line);
+                    System.out.println("Línea inválida (número incorrecto de columnas): " + line);
                     continue;
                 }
 
                 // Crear un producto basado en los datos
+                String nombreProducto = values[1].trim();
+                Producto productoExistente = productoDAO.obtenerTodos().stream()
+                        .filter(p -> p.getNombre().equalsIgnoreCase(nombreProducto))
+                        .findFirst()
+                        .orElse(null);
+
+                if (productoExistente != null) {
+                    System.out.println("Producto duplicado encontrado (no se importará): " + nombreProducto);
+                    continue;
+                }
+
                 Producto producto = new Producto();
-                producto.setNombre(values[1].trim());
+                producto.setNombre(nombreProducto);
                 producto.setCategoria(values[2].trim());
-                producto.setPrecio(Double.parseDouble(values[3].trim()));
-                producto.setStock(Integer.parseInt(values[4].trim()));
+
+                try {
+                    producto.setPrecio(Double.parseDouble(values[3].trim()));
+                    producto.setStock(Integer.parseInt(values[4].trim()));
+                } catch (NumberFormatException e) {
+                    System.out.println("Error en los datos numéricos para el producto: " + nombreProducto + " (se omitirá)");
+                    continue;
+                }
 
                 // Buscar proveedor si se incluye (opcional)
-
                 if (values.length > 5 && !values[5].trim().isEmpty()) {
                     String proveedorNombre = values[5].trim();
                     Proveedor proveedor = proveedorDAO.buscarPorNombre(proveedorNombre);
@@ -893,7 +925,7 @@ public class Main {
                     if (proveedor != null) {
                         producto.setProveedor(proveedor);
                     } else {
-                        System.out.println("Proveedor no encontrado: " + proveedorNombre + ". Producto: " + values[1]);
+                        System.out.println("Proveedor no encontrado: " + proveedorNombre + ". Producto: " + nombreProducto);
                         // Opcional: registrar un nuevo proveedor automáticamente
                         // Proveedor nuevoProveedor = new Proveedor(proveedorNombre, "Dirección genérica", "Teléfono genérico", "Email genérico");
                         // proveedorDAO.guardar(nuevoProveedor);
@@ -902,8 +934,12 @@ public class Main {
                 }
 
                 // Guardar el producto en la base de datos
-                productoDAO.guardar(producto);
-                contador++;
+                try {
+                    productoDAO.guardar(producto);
+                    contador++;
+                } catch (Exception e) {
+                    System.out.println("Error al guardar el producto: " + nombreProducto + " (se omitirá). Detalles: " + e.getMessage());
+                }
             }
 
             System.out.println("Importación completada. Total de productos importados: " + contador);
@@ -911,8 +947,6 @@ public class Main {
             System.out.println("Error: Archivo no encontrado: " + filePath);
         } catch (IOException e) {
             System.out.println("Error al leer el archivo: " + e.getMessage());
-        } catch (NumberFormatException e) {
-            System.out.println("Error en el formato de los datos del archivo CSV: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error durante la importación de productos: " + e.getMessage());
         }

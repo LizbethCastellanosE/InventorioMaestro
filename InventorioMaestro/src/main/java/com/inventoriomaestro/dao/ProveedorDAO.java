@@ -59,12 +59,22 @@ public class ProveedorDAO {
 
     public Proveedor buscarPorNombre(String nombre) {
         try {
-            return entityManager.createQuery(
+            List<Proveedor> resultados = entityManager.createQuery(
                             "SELECT p FROM Proveedor p WHERE LOWER(TRIM(p.nombre)) = LOWER(TRIM(:nombre))", Proveedor.class)
                     .setParameter("nombre", nombre)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null; // Si no se encuentra el proveedor, retorna null
+                    .getResultList();
+
+            if (resultados.isEmpty()) {
+                return null; // Si no se encuentra el proveedor
+            } else if (resultados.size() == 1) {
+                return resultados.get(0); // Si hay un único resultado
+            } else {
+                System.out.println("Advertencia: múltiples proveedores encontrados para el nombre: " + nombre);
+                return resultados.get(0); // Seleccionar el primero como solución temporal
+            }
+        } catch (Exception e) {
+            System.out.println("Error buscando proveedor por nombre: " + e.getMessage());
+            return null;
         }
     }
 

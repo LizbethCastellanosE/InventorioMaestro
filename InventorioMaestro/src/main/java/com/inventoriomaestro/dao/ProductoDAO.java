@@ -4,6 +4,7 @@ import com.inventoriomaestro.entidades.Producto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import java.util.List;
 
@@ -74,8 +75,19 @@ public class ProductoDAO {
     }
 
 
+    public Producto buscarPorNombreYCategoria(String nombre, String categoria) {
+        try {
+            return entityManager.createQuery(
+                            "SELECT p FROM Producto p WHERE LOWER(TRIM(p.nombre)) = LOWER(TRIM(:nombre)) AND LOWER(TRIM(p.categoria)) = LOWER(TRIM(:categoria))", Producto.class)
+                    .setParameter("nombre", nombre)
+                    .setParameter("categoria", categoria)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null; // No existe el producto
+        }
+    }
 
-    // Método para actualizar el stock (para compras y ventas)
+
     public void actualizarStock(long productoId, int cantidad) {
         Producto producto = encontrarPorId(productoId);  // Busca el producto por ID
         if (producto != null) {
