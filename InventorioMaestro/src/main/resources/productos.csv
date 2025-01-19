@@ -1,0 +1,13 @@
+ID,Nombre,Categoría,Precio,Stock,Proveedor
+1,Tornillo 4mm,Ferretería,0.12,100,Herramientas SA
+2,Martillo acero,Ferretería,5.50,20,Herramientas SA
+3,Pintura blanca interior,Pinturas,12.30,15,Pinturas Martínez
+4,Rodillo para paredes,Pinturas,4.70,25,Pinturas Martínez
+5,Taladro profesional,Electricidad,72.50,10,Máquinas y Más
+6,Bombilla LED 10W,Electricidad,2.90,100,LuzClara
+7,Regleta de 4 enchufes,Electricidad,5.00,50,Distribuciones Eléctricas
+8,Cerradura de seguridad,Ferretería,18.60,10,Seguridad House
+9,Broca madera 10mm,Ferretería,1.75,40,Herramientas SA
+10,Lija grano 120,Pinturas,0.80,200,Pinturas Martínez
+11,Interruptor 2 polos,Electricidad,3.20,30,Distribuciones Eléctricas
+12,Enchufe con toma tierra,Electricidad,2.50,40,Distribuciones Eléctricas
