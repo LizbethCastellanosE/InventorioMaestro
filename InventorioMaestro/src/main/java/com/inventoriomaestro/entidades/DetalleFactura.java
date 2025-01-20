@@ -1,5 +1,7 @@
 package com.inventoriomaestro.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class DetalleFactura {
     @Column(name = "id_linea")
     private long id;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "factura_id", nullable = false)
     private Factura factura;

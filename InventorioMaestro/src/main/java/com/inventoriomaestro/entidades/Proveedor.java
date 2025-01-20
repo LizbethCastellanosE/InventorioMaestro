@@ -1,11 +1,14 @@
 package com.inventoriomaestro.entidades;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "proveedores")
 public class Proveedor {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +27,8 @@ public class Proveedor {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "proveedor")
-    private List<Factura> facturas;
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Producto> productos = new ArrayList<>();
 
     // Constructor vacío
     public Proveedor() {
@@ -33,13 +36,18 @@ public class Proveedor {
 
     // Constructor con parámetros
     public Proveedor(String nombre, String direccion, String telefono, String email) {
-        this.nombre = nombre;
-        this.direccion = direccion;
-        this.telefono = telefono;
-        this.email = email;
+        setNombre(nombre);
+        setDireccion(direccion);
+        setTelefono(telefono);
+        setEmail(email);
     }
 
-    public Proveedor(long l, String dato, String dato1, String dato2, String dato3) {
+    public Proveedor(long id, String nombre, String direccion, String telefono, String email) {
+        this.id = id;
+        setNombre(nombre);
+        setDireccion(direccion);
+        setTelefono(telefono);
+        setEmail(email);
     }
 
     // Getters y Setters
@@ -56,7 +64,10 @@ public class Proveedor {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        this.nombre = nombre.trim();
     }
 
     public String getDireccion() {
@@ -64,7 +75,10 @@ public class Proveedor {
     }
 
     public void setDireccion(String direccion) {
-        this.direccion = direccion;
+        if (direccion == null || direccion.isBlank()) {
+            throw new IllegalArgumentException("La dirección no puede estar vacía.");
+        }
+        this.direccion = direccion.trim();
     }
 
     public String getTelefono() {
@@ -72,7 +86,27 @@ public class Proveedor {
     }
 
     public void setTelefono(String telefono) {
-        this.telefono = telefono;
+        if (telefono == null || telefono.isBlank()) {
+            throw new IllegalArgumentException("El teléfono no puede estar vacío.");
+        }
+
+        String telefonoLimpio = telefono.trim().replaceAll("\\s+", "");
+        if (!esTelefonoValido(telefonoLimpio)) {
+            throw new IllegalArgumentException("Formato de teléfono inválido. Debe contener entre 8 y 12 dígitos.");
+        }
+        this.telefono = telefonoLimpio;
+    }
+
+    private boolean esTelefonoValido(String telefono) {
+        if (telefono.length() < 8 || telefono.length() > 12) {
+            return false;
+        }
+        for (char c : telefono.toCharArray()) {
+            if (!Character.isDigit(c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public String getEmail() {
@@ -80,15 +114,37 @@ public class Proveedor {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("El email no puede estar vacío.");
+        }
+        if (!esEmailValido(email)) {
+            throw new IllegalArgumentException("Formato de correo inválido. Asegúrate de incluir '@' y un dominio válido.");
+        }
+        this.email = email.trim();
     }
 
-    public List<Factura> getFacturas() {
-        return facturas;
+    private boolean esEmailValido(String email) {
+        int indexArroba = email.indexOf('@');
+        int indexUltimoPunto = email.lastIndexOf('.');
+        return indexArroba > 0 && indexUltimoPunto > indexArroba && indexUltimoPunto < email.length() - 1;
     }
 
-    public void setFacturas(List<Factura> facturas) {
-        this.facturas = facturas;
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
+
+    public void agregarProducto(Producto producto) {
+        productos.add(producto);
+        producto.setProveedor(this);
+    }
+
+    public void eliminarProducto(Producto producto) {
+        productos.remove(producto);
+        producto.setProveedor(null);
     }
 
     @Override

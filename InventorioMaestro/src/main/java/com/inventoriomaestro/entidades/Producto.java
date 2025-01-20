@@ -1,6 +1,11 @@
 package com.inventoriomaestro.entidades;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "productos")
@@ -25,7 +30,11 @@ public class Producto {
 
     @ManyToOne
     @JoinColumn(name = "proveedor_id")
+    @JsonBackReference
     private Proveedor proveedor;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleFactura> facturas = new ArrayList<>();
 
     // Constructor vacío
     public Producto() {
@@ -90,6 +99,14 @@ public class Producto {
 
     public void setProveedor(Proveedor proveedor) {
         this.proveedor = proveedor;
+    }
+
+    public List<DetalleFactura> getFacturas() {
+        return facturas;
+    }
+
+    public void setFacturas(List<DetalleFactura> facturas) {
+        this.facturas = facturas;
     }
 
     @Override

@@ -13,14 +13,18 @@ public class ProductoDAO {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventorioMaestroPU");
     private EntityManager entityManager;
 
-    // Constructor para inicializar el EntityManager
     public ProductoDAO() {
         this.entityManager = emf.createEntityManager();
     }
 
-    // Guardar un nuevo producto
     public void guardar(Producto producto) {
         try {
+            // Validar si ya existe un producto con el mismo nombre y categoría
+            Producto existente = buscarPorNombreYCategoria(producto.getNombre(), producto.getCategoria());
+            if (existente != null) {
+                throw new IllegalArgumentException("Ya existe un producto con el mismo nombre y categoría.");
+            }
+
             entityManager.getTransaction().begin();  // Inicia la transacción
             entityManager.persist(producto);  // Guarda el producto
             entityManager.getTransaction().commit();  // Confirma la transacción
@@ -32,17 +36,14 @@ public class ProductoDAO {
         }
     }
 
-    // Buscar un producto por su ID
     public Producto encontrarPorId(long id) {
         return entityManager.find(Producto.class, id);  // Busca el producto por su ID
     }
 
-    // Obtener todos los productos
     public List<Producto> obtenerTodos() {
         return entityManager.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();  // Obtiene todos los productos
     }
 
-    // Actualizar un producto
     public Producto actualizar(Producto producto) {
         try {
             entityManager.getTransaction().begin();  // Inicia la transacción
@@ -57,11 +58,15 @@ public class ProductoDAO {
         }
     }
 
-    // Eliminar un producto por su ID
     public void eliminar(long id) {
         Producto producto = encontrarPorId(id);  // Busca el producto por ID
         if (producto != null) {
             try {
+                // Verificar relaciones (ejemplo: facturas asociadas)
+                if (producto.getFacturas() != null && !producto.getFacturas().isEmpty()) {
+                    throw new IllegalArgumentException("No se puede eliminar el producto porque está asociado a facturas.");
+                }
+
                 entityManager.getTransaction().begin();  // Inicia la transacción
                 entityManager.remove(producto);  // Elimina el producto
                 entityManager.getTransaction().commit();  // Confirma la transacción
@@ -71,6 +76,8 @@ public class ProductoDAO {
                 }
                 throw e;
             }
+        } else {
+            throw new IllegalArgumentException("Producto no encontrado con ID: " + id);
         }
     }
 
@@ -91,12 +98,17 @@ public class ProductoDAO {
     public void actualizarStock(long productoId, int cantidad) {
         Producto producto = encontrarPorId(productoId);  // Busca el producto por ID
         if (producto != null) {
-            producto.setStock(producto.getStock() + cantidad);  // Actualiza el stock (sumando o restando según corresponda)
+            int nuevoStock = producto.getStock() + cantidad;
+            if (nuevoStock < 0) {
+                throw new IllegalArgumentException("El stock resultante no puede ser negativo.");
+            }
+            producto.setStock(nuevoStock);  // Actualiza el stock
             actualizar(producto);  // Actualiza el producto en la base de datos
+        } else {
+            throw new IllegalArgumentException("Producto no encontrado con ID: " + productoId);
         }
     }
 
-    // Cerrar el EntityManager
     public void cerrar() {
         if (entityManager != null) {
             entityManager.close();
