@@ -14,6 +14,9 @@ import static com.inventoriomaestro.principal.Main.proveedorDAO;
 
 public class ServicioProducto {
 
+    //El servicio de producto se encarga de las operaciones relacionadas con los productos en el inventario.
+    //Todo lo que tien que ver con regitrro modificacion y eliminacion de productos se hace a traves de este servicio.
+
     private static ProductoDAO productoDAO = null;
 
     public ServicioProducto(ProductoDAO productoDAO) {
@@ -143,7 +146,6 @@ public class ServicioProducto {
     public static void consultarProductos() {
         System.out.println("Lista de productos en inventario:");
 
-        // Consultar todos los productos usando el DAO
         productoDAO.obtenerTodos().forEach(producto -> {
             System.out.println("ID: " + producto.getId());
             System.out.println("Nombre: " + producto.getNombre());
@@ -201,10 +203,10 @@ public class ServicioProducto {
         System.out.println("Exportando inventario a " + rutaArchivo + "...");
 
         try (PrintWriter writer = new PrintWriter(new File(rutaArchivo))) {
-            // Escribir encabezados
+
             writer.println("ID,Nombre,Categoría,Stock,Precio,Proveedor");
 
-            // Obtener productos y escribir en el archivo
+
             List<Producto> productos = productoDAO.obtenerTodos();
 
             if (productos.isEmpty()) {
@@ -213,10 +215,9 @@ public class ServicioProducto {
             }
 
             for (Producto producto : productos) {
-                // Manejar el nombre del proveedor si no está asociado
+
                 String proveedor = (producto.getProveedor() != null) ? producto.getProveedor().getNombre() : "N/A";
 
-                // Escribir el producto en el archivo CSV
                 writer.printf("%d,%s,%s,%d,%.2f,%s%n",
                         producto.getId(),
                         producto.getNombre(),

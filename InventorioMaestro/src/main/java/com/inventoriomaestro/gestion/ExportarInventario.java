@@ -25,10 +25,10 @@ public class ExportarInventario {
         }
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(rutaArchivo))) {
-            // Escribir encabezados
+
             writer.println("ID,Nombre,Categoría,Precio,Stock,Proveedor");
 
-            // Escribir productos
+
             for (Producto producto : productos) {
                 String proveedorNombre = producto.getProveedor() != null ? producto.getProveedor().getNombre() : "Sin proveedor";
                 writer.printf("%d,%s,%s,%.2f,%d,%s%n",

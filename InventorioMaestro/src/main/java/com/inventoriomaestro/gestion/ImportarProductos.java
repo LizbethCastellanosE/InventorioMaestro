@@ -32,7 +32,6 @@ public class ImportarProductos {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String linea;
 
-            // Saltar el encabezado
             br.readLine();
 
             int contador = 0; // Contar productos importados
@@ -41,7 +40,6 @@ public class ImportarProductos {
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
 
-                // Validar número de columnas
                 if (datos.length != 6) {
                     System.out.println("Línea inválida (número de columnas incorrecto): " + linea);
                     errores++;
@@ -55,14 +53,12 @@ public class ImportarProductos {
                     int stock = Integer.parseInt(datos[4].trim());
                     String nombreProveedor = datos[5].trim();
 
-                    // Validar si el producto ya existe por su nombre
                     if (productoDAO.obtenerTodos().stream()
                             .anyMatch(p -> p.getNombre().equalsIgnoreCase(nombreProducto))) {
                         System.out.println("Producto duplicado encontrado (omitido): " + nombreProducto);
                         continue;
                     }
 
-                    // Buscar proveedor
                     Proveedor proveedor = proveedorDAO.buscarPorNombre(nombreProveedor);
                     if (proveedor == null) {
                         // Crear proveedor genérico si no existe
@@ -70,7 +66,6 @@ public class ImportarProductos {
                         proveedorDAO.guardar(proveedor);
                     }
 
-                    // Crear y guardar producto
                     Producto producto = new Producto(nombreProducto, categoria, precio, stock, proveedor);
                     productoDAO.guardar(producto);
                     contador++;

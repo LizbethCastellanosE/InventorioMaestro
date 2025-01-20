@@ -30,11 +30,9 @@ public class Proveedor {
     @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Producto> productos = new ArrayList<>();
 
-    // Constructor vacío
     public Proveedor() {
     }
 
-    // Constructor con parámetros
     public Proveedor(String nombre, String direccion, String telefono, String email) {
         setNombre(nombre);
         setDireccion(direccion);
@@ -123,6 +121,7 @@ public class Proveedor {
         this.email = email.trim();
     }
 
+    //Vslidcion del email con el @ y el punto
     private boolean esEmailValido(String email) {
         int indexArroba = email.indexOf('@');
         int indexUltimoPunto = email.lastIndexOf('.');

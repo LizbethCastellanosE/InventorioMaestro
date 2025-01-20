@@ -28,11 +28,11 @@ public class Factura {
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private List<DetalleFactura> lineas = new ArrayList<>();
 
-    // Constructor vacío
+
     public Factura() {
     }
 
-    // Constructor con parámetros
+
     public Factura(Date fecha, String tipoDeFactura, Proveedor proveedor) {
         this.fecha = fecha;
         this.tipoDeFactura = tipoDeFactura;

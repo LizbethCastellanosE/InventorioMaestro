@@ -17,13 +17,12 @@ public class GeneradorPDF {
             PdfDocument pdf = new PdfDocument(writer);
             Document document = new Document(pdf);
 
-            // Añadir título
+
             document.add(new Paragraph(titulo)
                     .setTextAlignment(TextAlignment.CENTER)
                     .setBold()
                     .setFontSize(16));
 
-            // Añadir contenido
             document.add(new Paragraph(contenido)
                     .setTextAlignment(TextAlignment.LEFT)
                     .setFontSize(12));

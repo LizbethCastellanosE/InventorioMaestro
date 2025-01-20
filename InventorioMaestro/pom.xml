@@ -12,7 +12,6 @@
   </properties>
 
   <dependencies>
-    <!-- JPA API -->
     <dependency>
       <groupId>javax.persistence</groupId>
       <artifactId>javax.persistence-api</artifactId>
@@ -46,7 +45,7 @@
       <version>8.0.33</version>
     </dependency>
 
-    <!-- iText para PDF -->
+    <!-- iText para PDF ya que no funciono el que estaba antes -->
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>kernel</artifactId>
@@ -65,7 +64,7 @@
     </dependency>
 
 
-    <!-- Apache POI para Word y Excel -->
+    <!-- Apache POI para Word(docx) y Excel(xlsx) -->
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi</artifactId>
@@ -77,14 +76,14 @@
       <version>5.2.3</version>
     </dependency>
 
-    <!-- Manejo de JSON -->
+    <!-- JSON -->
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
       <version>2.15.0</version>
     </dependency>
 
-    <!-- JUnit para pruebas -->
+    <!-- JUnit para pruebas | Esto aydo a que no diera mas fallos-->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

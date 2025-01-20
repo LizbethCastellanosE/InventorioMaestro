@@ -18,6 +18,7 @@ import static com.inventoriomaestro.principal.Main.proveedorDAO;
 import static com.inventoriomaestro.util.UtilidadFechas.validarFecha;
 
 public class ServicioFactura {
+    // Los servicios de Factura se encargan de lo  relacionado con las facturas
 
     private final FacturaDAO facturaDAO;
     private final ProductoDAO productoDAO;
@@ -31,7 +32,7 @@ public class ServicioFactura {
         try {
             System.out.println("Registro de compra de productos:");
 
-            // Usamos validarFecha de UtilidadFechas para obtener la fecha
+            // Usamos validarFecha de UtilidadFechas(clase) para obtener la fecha
             Date fecha = UtilidadFechas.validarFecha(scanner);
 
             System.out.println("Seleccione el ID del proveedor:");
@@ -39,7 +40,7 @@ public class ServicioFactura {
             proveedores.forEach(proveedor -> System.out.println(proveedor.getId() + " - " + proveedor.getNombre()));
 
             long proveedorId = scanner.nextLong();
-            scanner.nextLine(); // Consumir salto de línea
+            scanner.nextLine();
             Proveedor proveedor = proveedorDAO.encontrarPorId(proveedorId);
 
             if (proveedor == null) {
@@ -99,7 +100,7 @@ public class ServicioFactura {
             Date fecha = validarFecha(scanner);
 
             System.out.println("Seleccione el ID del cliente:");
-            Factura factura = new Factura(fecha, "VENTA", null); // Proveedor es nulo en este caso.
+            Factura factura = new Factura(fecha, "VENTA", null);
 
             boolean agregarProductos = true;
             while (agregarProductos) {
@@ -149,7 +150,7 @@ public class ServicioFactura {
         System.out.println("2. Exportar a XML");
 
         int opcion = scanner.nextInt();
-        scanner.nextLine(); // Consumir salto de línea
+        scanner.nextLine();
 
         System.out.println("Ingrese el nombre del archivo de salida (sin extensión):");
         String nombreArchivo = scanner.nextLine();

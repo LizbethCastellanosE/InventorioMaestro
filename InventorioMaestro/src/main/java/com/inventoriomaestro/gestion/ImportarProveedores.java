@@ -28,13 +28,11 @@ public class ImportarProveedores {
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
             String linea;
 
-            // Saltar el encabezado
             br.readLine();
 
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
 
-                // Validar que la línea tenga el número esperado de campos
                 if (datos.length != 5) {
                     System.out.println("Error en la línea: " + linea + ". Se esperaban 5 campos.");
                     continue;

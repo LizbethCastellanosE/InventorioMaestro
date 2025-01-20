@@ -16,6 +16,8 @@ import java.util.List;
 
 public class ServicioInforme {
 
+    // Los servicios de Informe se encargan de generar informes en formato PDF y Word.
+
     private final FacturaDAO facturaDAO;
     private final ProductoDAO productoDAO;
 
@@ -27,11 +29,10 @@ public class ServicioInforme {
     public void generarInformeVentas() {
         GeneradorPDF generador = new GeneradorPDF();
 
-        // Configurar los parámetros
         String archivo = "informe_ventas.pdf";
         String titulo = "Informe de Ventas";
 
-        // Generar contenido dinámico
+
         StringBuilder contenido = new StringBuilder();
         contenido.append("Ventas realizadas:\n\n");
 

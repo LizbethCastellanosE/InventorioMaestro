@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ExportadorFacturas {
 
-    // Exportar facturación a JSON
+    // Exportar facturas a JSON
     public void exportarFacturacionAJSON(List<Factura> facturas, String archivo) {
         if (facturas == null || facturas.isEmpty()) {
             System.out.println("No hay facturas para exportar a JSON.");
@@ -28,18 +28,16 @@ public class ExportadorFacturas {
         }
     }
 
-    // Exportar facturación a XML
+    // Exportar facturas a XML
     public void exportarFacturacionAXML(List<Factura> facturas, String archivo) {
         if (facturas == null || facturas.isEmpty()) {
             System.out.println("No hay facturas para exportar a XML.");
             return;
         }
         try {
-            // Crear elemento raíz
             Element root = new Element("Facturas");
             Document doc = new Document(root);
 
-            // Iterar sobre facturas y construir XML
             for (Factura factura : facturas) {
                 Element facturaElement = new Element("Factura");
                 facturaElement.setAttribute("ID", String.valueOf(factura.getId()));
@@ -65,7 +63,7 @@ public class ExportadorFacturas {
                 root.addContent(facturaElement);
             }
 
-            // Escribir archivo XML
+            // Escribir el XML
             try (FileWriter writer = new FileWriter(archivo)) {
                 XMLOutputter outputter = new XMLOutputter(Format.getPrettyFormat());
                 outputter.output(doc, writer);

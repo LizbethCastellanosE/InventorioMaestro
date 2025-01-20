@@ -36,11 +36,9 @@ public class Producto {
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleFactura> facturas = new ArrayList<>();
 
-    // Constructor vacío
     public Producto() {
     }
 
-    // Constructor con parámetros
     public Producto(String nombre, String categoria, double precio, int stock, Proveedor proveedor) {
         this.nombre = nombre;
         this.categoria = categoria;

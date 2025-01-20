@@ -19,37 +19,36 @@ public class ProductoDAO {
 
     public void guardar(Producto producto) {
         try {
-            // Validar si ya existe un producto con el mismo nombre y categoría
             Producto existente = buscarPorNombreYCategoria(producto.getNombre(), producto.getCategoria());
             if (existente != null) {
                 throw new IllegalArgumentException("Ya existe un producto con el mismo nombre y categoría.");
             }
 
-            entityManager.getTransaction().begin();  // Inicia la transacción
-            entityManager.persist(producto);  // Guarda el producto
-            entityManager.getTransaction().commit();  // Confirma la transacción
+            entityManager.getTransaction().begin();
+            entityManager.persist(producto);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            throw e;  // Lanza la excepción para manejarla externamente
+            throw e;
         }
     }
 
     public Producto encontrarPorId(long id) {
-        return entityManager.find(Producto.class, id);  // Busca el producto por su ID
+        return entityManager.find(Producto.class, id);
     }
 
     public List<Producto> obtenerTodos() {
-        return entityManager.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();  // Obtiene todos los productos
+        return entityManager.createQuery("SELECT p FROM Producto p", Producto.class).getResultList();
     }
 
     public Producto actualizar(Producto producto) {
         try {
-            entityManager.getTransaction().begin();  // Inicia la transacción
-            Producto productoActualizado = entityManager.merge(producto);  // Actualiza el producto
-            entityManager.getTransaction().commit();  // Confirma la transacción
-            return productoActualizado;  // Devuelve el producto actualizado
+            entityManager.getTransaction().begin();
+            Producto productoActualizado = entityManager.merge(producto);
+            entityManager.getTransaction().commit();
+            return productoActualizado;
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -59,17 +58,16 @@ public class ProductoDAO {
     }
 
     public void eliminar(long id) {
-        Producto producto = encontrarPorId(id);  // Busca el producto por ID
+        Producto producto = encontrarPorId(id);
         if (producto != null) {
             try {
-                // Verificar relaciones (ejemplo: facturas asociadas)
                 if (producto.getFacturas() != null && !producto.getFacturas().isEmpty()) {
                     throw new IllegalArgumentException("No se puede eliminar el producto porque está asociado a facturas.");
                 }
 
-                entityManager.getTransaction().begin();  // Inicia la transacción
-                entityManager.remove(producto);  // Elimina el producto
-                entityManager.getTransaction().commit();  // Confirma la transacción
+                entityManager.getTransaction().begin();
+                entityManager.remove(producto);
+                entityManager.getTransaction().commit();
             } catch (Exception e) {
                 if (entityManager.getTransaction().isActive()) {
                     entityManager.getTransaction().rollback();
@@ -81,7 +79,6 @@ public class ProductoDAO {
         }
     }
 
-
     public Producto buscarPorNombreYCategoria(String nombre, String categoria) {
         try {
             return entityManager.createQuery(
@@ -90,20 +87,19 @@ public class ProductoDAO {
                     .setParameter("categoria", categoria)
                     .getSingleResult();
         } catch (NoResultException e) {
-            return null; // No existe el producto
+            return null;
         }
     }
 
-
     public void actualizarStock(long productoId, int cantidad) {
-        Producto producto = encontrarPorId(productoId);  // Busca el producto por ID
+        Producto producto = encontrarPorId(productoId);
         if (producto != null) {
             int nuevoStock = producto.getStock() + cantidad;
             if (nuevoStock < 0) {
                 throw new IllegalArgumentException("El stock resultante no puede ser negativo.");
             }
-            producto.setStock(nuevoStock);  // Actualiza el stock
-            actualizar(producto);  // Actualiza el producto en la base de datos
+            producto.setStock(nuevoStock);
+            actualizar(producto);
         } else {
             throw new IllegalArgumentException("Producto no encontrado con ID: " + productoId);
         }

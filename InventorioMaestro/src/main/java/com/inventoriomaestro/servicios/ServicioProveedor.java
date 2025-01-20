@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class ServicioProveedor {
 
+//    Servicio proveedor lo ismo que el servcio producto pero en prveedores
     private final ProveedorDAO proveedorDAO;
 
     public ServicioProveedor(ProveedorDAO proveedorDAO) {

@@ -7,6 +7,10 @@ import java.util.Scanner;
 
 public class UtilidadFechas {
 
+    //Cree esta clase paar poder tener mas organizado el codigo
+    //y poder reutilizarlo en otras clasees . Es para la validacon d las fechas y el parsearFecha lo agregue para poder
+    //usarlo en la clase de inventario para poder validar la fecha de caducidad de los productos
+
     public static Date validarFecha(Scanner scanner) {
         while (true) {
             System.out.println("Ingrese la fecha (formato: yyyy-MM-dd):");
@@ -24,7 +28,7 @@ public class UtilidadFechas {
             return new SimpleDateFormat("yyyy-MM-dd").parse(fechaInput);
         } catch (ParseException e) {
             System.out.println("Error: Formato de fecha inválido.");
-            return null; // Retorna null si la fecha no es válida
+            return null; //si la fecha no es válida(null)
         }
     }
 

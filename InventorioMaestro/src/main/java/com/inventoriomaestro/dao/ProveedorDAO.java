@@ -13,42 +13,39 @@ public class ProveedorDAO {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventorioMaestroPU");
     private EntityManager entityManager;
 
-    // Constructor para inicializar el EntityManager
     public ProveedorDAO() {
         this.entityManager = emf.createEntityManager();
     }
 
-    // Guardar un nuevo proveedor
     public void guardar(Proveedor proveedor) {
         try {
-            entityManager.getTransaction().begin();  // Inicia la transacción
-            entityManager.persist(proveedor);  // Guarda el proveedor
-            entityManager.getTransaction().commit();  // Confirma la transacción
+            entityManager.getTransaction().begin();
+            entityManager.persist(proveedor);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            throw e;  // Lanza la excepción para manejarla externamente
+            throw e;
         }
     }
 
-    // Buscar un proveedor por su ID
     public Proveedor encontrarPorId(long id) {
-        return entityManager.find(Proveedor.class, id);  // Busca el proveedor por su ID
+        return entityManager.find(Proveedor.class, id);  
     }
 
-    // Obtener todos los proveedores
+
     public List<Proveedor> obtenerTodos() {
-        return entityManager.createQuery("SELECT p FROM Proveedor p", Proveedor.class).getResultList();  // Obtiene todos los proveedores
+        return entityManager.createQuery("SELECT p FROM Proveedor p", Proveedor.class).getResultList();
     }
 
-    // Actualizar un proveedor
+
     public Proveedor actualizar(Proveedor proveedor) {
         try {
-            entityManager.getTransaction().begin();  // Inicia la transacción
-            Proveedor proveedorActualizado = entityManager.merge(proveedor);  // Actualiza el proveedor
-            entityManager.getTransaction().commit();  // Confirma la transacción
-            return proveedorActualizado;  // Devuelve el proveedor actualizado
+            entityManager.getTransaction().begin();
+            Proveedor proveedorActualizado = entityManager.merge(proveedor);
+            entityManager.getTransaction().commit();
+            return proveedorActualizado;
         } catch (Exception e) {
             if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
@@ -65,12 +62,12 @@ public class ProveedorDAO {
                     .getResultList();
 
             if (resultados.isEmpty()) {
-                return null; // Si no se encuentra el proveedor
+                return null;
             } else if (resultados.size() == 1) {
-                return resultados.get(0); // Si hay un único resultado
+                return resultados.get(0);
             } else {
                 System.out.println("Advertencia: múltiples proveedores encontrados para el nombre: " + nombre);
-                return resultados.get(0); // Seleccionar el primero como solución temporal
+                return resultados.get(0);
             }
         } catch (Exception e) {
             System.out.println("Error buscando proveedor por nombre: " + e.getMessage());
@@ -79,14 +76,13 @@ public class ProveedorDAO {
     }
 
 
-    // Eliminar un proveedor por su ID
     public void eliminar(long id) {
-        Proveedor proveedor = encontrarPorId(id);  // Busca el proveedor por ID
+        Proveedor proveedor = encontrarPorId(id);
         if (proveedor != null) {
             try {
-                entityManager.getTransaction().begin();  // Inicia la transacción
-                entityManager.remove(proveedor);  // Elimina el proveedor
-                entityManager.getTransaction().commit();  // Confirma la transacción
+                entityManager.getTransaction().begin();
+                entityManager.remove(proveedor);
+                entityManager.getTransaction().commit();
             } catch (Exception e) {
                 if (entityManager.getTransaction().isActive()) {
                     entityManager.getTransaction().rollback();
@@ -96,7 +92,6 @@ public class ProveedorDAO {
         }
     }
 
-    // Cerrar el EntityManager
     public void cerrar() {
         if (entityManager != null) {
             entityManager.close();

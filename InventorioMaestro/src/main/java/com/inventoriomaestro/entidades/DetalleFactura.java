@@ -28,11 +28,9 @@ public class DetalleFactura {
     @Column(name = "precio_unitario", nullable = false)
     private double precioUnitario;
 
-    // Constructor vacío
     public DetalleFactura() {
     }
 
-    // Constructor principal con todos los parámetros
     public DetalleFactura(Factura factura, Producto producto, int cantidad, double precioUnitario) {
         this.factura = factura;
         this.producto = producto;
@@ -40,12 +38,12 @@ public class DetalleFactura {
         this.precioUnitario = precioUnitario;
     }
 
-    // Constructor adicional con orden de parámetros diferente
+
     public DetalleFactura(Producto producto, Factura factura, int cantidad, double precioUnitario) {
         this(factura, producto, cantidad, precioUnitario); // Llama al constructor principal
     }
 
-    // Constructor adicional para crear solo con el producto y cantidad
+
     public DetalleFactura(Producto producto, int cantidad, double precioUnitario) {
         this.producto = producto;
         this.cantidad = cantidad;

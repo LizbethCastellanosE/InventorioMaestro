@@ -14,12 +14,10 @@ public class FacturaDAO {
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("InventorioMaestroPU");
     private EntityManager entityManager;
 
-    // Constructor para inicializar el EntityManager
     public FacturaDAO() {
         this.entityManager = emf.createEntityManager();
     }
 
-    // Guardar una nueva factura
     public void guardar(Factura factura) {
         try {
             entityManager.getTransaction().begin();
@@ -33,17 +31,14 @@ public class FacturaDAO {
         }
     }
 
-    // Buscar una factura por su ID
     public Factura encontrarPorId(long id) {
         return entityManager.find(Factura.class, id);
     }
 
-    // Obtener todas las facturas
     public List<Factura> obtenerTodos() {
         return entityManager.createQuery("SELECT f FROM Factura f", Factura.class).getResultList();
     }
 
-    // Actualizar una factura
     public Factura actualizar(Factura factura) {
         try {
             entityManager.getTransaction().begin();
@@ -58,7 +53,6 @@ public class FacturaDAO {
         }
     }
 
-    // Obtener facturas por tipo (VENTA o COMPRA)
     public List<Factura> obtenerFacturasPorTipo(String tipo) {
         TypedQuery<Factura> query = entityManager.createQuery(
                 "SELECT f FROM Factura f WHERE f.tipoDeFactura = :tipo", Factura.class);
@@ -66,7 +60,6 @@ public class FacturaDAO {
         return query.getResultList();
     }
 
-    // Obtener facturas por tipo y rango de fechas
     public List<Factura> obtenerFacturasPorTipoYFechas(String tipo, Date inicio, Date fin) {
         return entityManager.createQuery(
                         "SELECT f FROM Factura f WHERE f.tipoDeFactura = :tipo AND f.fecha BETWEEN :inicio AND :fin",
@@ -77,7 +70,6 @@ public class FacturaDAO {
                 .getResultList();
     }
 
-    // Eliminar una factura por su ID
     public void eliminar(long id) {
         Factura factura = encontrarPorId(id);
         if (factura != null) {
@@ -94,7 +86,6 @@ public class FacturaDAO {
         }
     }
 
-    // Cerrar el EntityManager
     public void cerrar() {
         if (entityManager != null) {
             entityManager.close();

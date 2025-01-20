@@ -33,7 +33,7 @@ public class Main {
         boolean continuar = true;
 
         while (continuar) {
-            // Mostrar menú principal
+            // Menú general que lleva a otros menus
             System.out.println("Seleccione una opción:");
             System.out.println("1. Gestión de productos");
             System.out.println("2. Gestión de proveedores");
@@ -44,7 +44,7 @@ public class Main {
             System.out.println("7. Salir");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -63,7 +63,7 @@ public class Main {
                     generarInformes(scanner);
                     break;
                 case 6:
-                    servicioFactura.exportarFacturacion(scanner); // Llamar al método del servicio
+                    servicioFactura.exportarFacturacion(scanner);
                     break;
                 case 7:
                     continuar = false;
@@ -77,6 +77,7 @@ public class Main {
         }
     }
 
+    //Menu que gestiona los productos y su información
     private static void gestionProductos(Scanner scanner) {
         boolean continuar = true;
         while (continuar) {
@@ -88,11 +89,11 @@ public class Main {
             System.out.println("5. Volver al menú principal");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
-                    servicioProducto.registrarProducto(scanner); // Usar el servicioProducto
+                    servicioProducto.registrarProducto(scanner);
                     break;
                 case 2:
                     servicioProducto.consultarProductos();
@@ -113,6 +114,7 @@ public class Main {
         }
     }
 
+    // Menu que gestiona los proveedores y su información
     private static void gestionProveedores(Scanner scanner) {
         boolean continuar = true;
         while (continuar) {
@@ -124,7 +126,7 @@ public class Main {
             System.out.println("5. Volver al menú principal");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -149,6 +151,7 @@ public class Main {
         }
     }
 
+    // Menu que gestiona las facturas de compra y venta del negocio
     private static void gestionFacturas(Scanner scanner) {
         boolean continuar = true;
         while (continuar) {
@@ -158,7 +161,7 @@ public class Main {
             System.out.println("3. Volver al menú principal");
 
             int opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir salto de línea
+            scanner.nextLine();
 
             switch (opcion) {
                 case 1:
@@ -177,6 +180,7 @@ public class Main {
         }
     }
 
+    // Menu que importa y exporta datos de productos, proveedores y facturación en csv, xml y json
     private static void importarExportarDatos(Scanner scanner) {
         System.out.println("Importar/exportar datos:");
         System.out.println("1. Importar productos desde CSV");
@@ -186,7 +190,7 @@ public class Main {
         System.out.println("5. Volver al menú principal");
 
         int opcion = scanner.nextInt();
-        scanner.nextLine(); // Consumir salto de línea
+        scanner.nextLine();
 
         switch (opcion) {
             case 1:
@@ -235,6 +239,7 @@ public class Main {
         }
     }
 
+    // Menu que genera informes de invntario y ventas en PDF y Word
     private static void generarInformes(Scanner scanner) {
         System.out.println("Generar informes:");
         System.out.println("1. Generar informe de ventas (PDF)");
@@ -242,18 +247,18 @@ public class Main {
         System.out.println("3. Volver al menú principal");
 
         int opcion = scanner.nextInt();
-        scanner.nextLine(); // Consumir salto de línea
+        scanner.nextLine();
 
         switch (opcion) {
             case 1:
-                servicioInforme.generarInformeVentas(); // Aquí se asumirá que este método también está adaptado
+                servicioInforme.generarInformeVentas();
                 break;
             case 2:
                 System.out.println("Ingrese la ruta del archivo Word:");
                 String archivoWord = scanner.nextLine();
                 System.out.println("Ingrese el umbral de stock (por ejemplo, 10):");
                 int umbralStock = scanner.nextInt();
-                scanner.nextLine(); // Consumir salto de línea
+                scanner.nextLine();
                 servicioInforme.generarInformeInventarioWord(archivoWord, umbralStock);
                 break;
             case 3:
@@ -265,6 +270,7 @@ public class Main {
         }
     }
 
+    // Cierra las conexiones a la base de datos
     private static void cerrarConexiones() {
         productoDAO.cerrar();
         proveedorDAO.cerrar();
